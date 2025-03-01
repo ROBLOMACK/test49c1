@@ -49,5 +49,5 @@ app.listen(port, () => {
 
   // Sofortige Ausführung und alle 5 Minuten wiederholen
   keepAlive();
-  setInterval(keepAlive, 5 * 60 * 1000);
+  setInterval(keepAlive, 7 * 60 * 1000);
 });
