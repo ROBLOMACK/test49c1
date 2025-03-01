@@ -6,6 +6,11 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
+// Root Route für Keep-Alive
+app.get('/', (req, res) => {
+  res.send('OK');
+});
+
 // Proxy Route für API-Anfragen
 app.get('/proxy/*', async (req, res) => {
   const targetUrl = req.url.replace('/proxy/', '');
@@ -31,6 +36,18 @@ app.get('/img/*', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Proxy server running on http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Proxy server running on http://localhost:${port}`);
+
+  // Keep-Alive-Mechanismus
+  const keepAlive = () => {
+    const url = `http://localhost:${port}/`;
+    fetch(url)
+      .then(res => console.log(`Keep-Alive request sent, status: ${res.status}`))
+      .catch(err => console.error('Error sending keep-alive:', err));
+  };
+
+  // Sofortige Ausführung und alle 5 Minuten wiederholen
+  keepAlive();
+  setInterval(keepAlive, 5 * 60 * 1000);
 });
