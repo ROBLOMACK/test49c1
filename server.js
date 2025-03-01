@@ -1,10 +1,25 @@
 const express = require('express');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = 3000;
 const port = process.env.PORT || 3000;
 
+// Rate Limiting Middleware
+const limiter = rateLimit({
+  windowMs: 1000, // 1 Sekunde
+  max: 4, // Maximal 4 Anfragen pro Sekunde
+  handler: (req, res) => {
+    res.status(429).json({ error: 'Zu viele Anfragen, bitte warten Sie 5 Sekunden.' });
+  },
+  onLimitReached: (req, res, options) => {
+    // Warte 5 Sekunden, bevor weitere Anfragen bearbeitet werden
+    setTimeout(() => {}, 5000);
+  }
+});
+
 app.use(cors());
+app.use(limiter); // Rate Limiting auf alle Routen anwenden
 
 // Root Route für Keep-Alive
 app.get('/', (req, res) => {
