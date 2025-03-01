@@ -12,8 +12,8 @@ app.get('/', (req, res) => {
 });
 
 // Proxy Route für API-Anfragen
-app.get('/proxy/*', async (req, res) => {
-  const targetUrl = req.url.replace('/proxy/', '');
+app.get('/p/*', async (req, res) => {
+  const targetUrl = req.url.replace('/p/', '');
   try {
     const response = await fetch(targetUrl);
     const data = await response.json();
